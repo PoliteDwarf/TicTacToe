@@ -4,7 +4,7 @@ import java.util.HashSet;
 
 import static sun.swing.MenuItemLayoutHelper.max;
 
-public class Tictactoe {
+class Tictactoe {
 
     static private char[][] Grid;
     static private final ArrayList<Character> possibleSymbols = new ArrayList<Character>(Arrays.asList('X', 'O'));
@@ -18,35 +18,52 @@ public class Tictactoe {
     }
 
     static void addSymb(char a, int x, int y){
-        if ((x > 0) && (x < 4) && (y > 0) && (y < 4) && possibleSymbols.contains(a)) Grid[x - 1][y - 1] = a;
+        if ((x > 0) && (x < Grid.length + 1) && (y > 0) && (y < Grid[0].length + 1) && possibleSymbols.contains(a)) Grid[x - 1][y - 1] = a;
         else System.out.println("Неверный ввод");
     }
 
-    public static void delSymb(int x, int y){
-        if ((x > 0) && (x < 4) && (y > 0) && (y < 4)) Grid[x - 1][y - 1] = '_';
+    static void delSymb(int x, int y){
+        if ((x > 0) && (x < Grid.length + 1) && (y > 0) && (y < Grid[0].length + 1)) Grid[x - 1][y - 1] = '_';
+        else System.out.println("Неверный ввод");
     }
 
-    static int lngstSeq(){
+    private static int direct(int x, int y, int plusx, int plusy, char elem) {
+        byte flag;
+        int max;
+        if (x + plusx == Grid.length || y + plusy == Grid[x].length || y + plusy < 0) flag = 1;
+        else flag = 0;
+        if (Grid[x][y] == elem) max = 1;
+        else {
+            max = 0;
+            flag = 1;
+        }
+        while (flag == 0){
+            if (Grid[x][y] == Grid[x + plusx][y + plusy] && Grid[x][y] == elem) max += 1;
+            else flag = 1;
+            x += plusx;
+            y += plusy;
+            if (x + plusx == Grid.length || y + plusy == Grid[x].length || y + plusy < 0) flag = 1;
+        }
+        return max;
+    }
+
+    static int longX(){
         int rez = 0;
-        int temprez = 0;
         for (int i = 0; i < Grid.length; i++) {
             for (int j = 0; j < Grid[i].length; j++){
-                if (possibleSymbols.contains(Grid[i][j]) && temprez == 0) temprez = 1;
-                if (j < (Grid[i].length - 1) && Grid[i][j] == Grid[i][j+1] && possibleSymbols.contains(Grid[i][j])) temprez++;
-                else {
-                    rez = max(temprez, rez);
-                    temprez = 0;
-                }
+                rez = max(rez, direct(i, j, 0, 1, 'X'), direct(i, j, 1, 0, 'X'),
+                        direct(i, j, 1, 1, 'X'), direct(i, j, 1, -1, 'X'));
             }
         }
-        for (int j = 0; j < Grid[0].length; j++) {
-            for (int i = 0; i < Grid.length; i++){
-                if (possibleSymbols.contains(Grid[i][j]) && temprez == 0) temprez = 1;
-                if (i < (Grid.length - 1) && Grid[i][j] == Grid[i+1][j] && possibleSymbols.contains(Grid[i][j])) temprez++;
-                else {
-                    rez = max(temprez, rez);
-                    temprez = 0;
-                }
+        return rez;
+    }
+
+    static int longO(){
+        int rez = 0;
+        for (int i = 0; i < Grid.length; i++) {
+            for (int j = 0; j < Grid[i].length; j++){
+                rez = max(rez, direct(i, j, 0, 1, 'O'), direct(i, j, 1, 0, 'O'),
+                        direct(i, j, 1, 1, 'O'), direct(i, j, 1, -1, 'O'));
             }
         }
         return rez;

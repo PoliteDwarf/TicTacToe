@@ -9,6 +9,11 @@ public class Main {
         Tictactoe.addSymb('O', 1, 2);
         Tictactoe.addSymb('O', 1, 3);
         Tictactoe.show();
-        System.out.println(Tictactoe.lngstSeq());
+        Tictactoe.delSymb(3, 1);
+        Tictactoe.addSymb('X', 1, 1);
+        Tictactoe.addSymb('X', 2, 2);
+        Tictactoe.show();
+        System.out.println(Tictactoe.longX());
+        System.out.println(Tictactoe.longO());
     }
 }
