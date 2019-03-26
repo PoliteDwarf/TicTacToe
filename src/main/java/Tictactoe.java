@@ -69,10 +69,14 @@ class Tictactoe {
         return rez;
     }
 
+    static char[][] getGrid(){
+        return Grid;
+    }
+
     static void show(){
-        for (int i = 0; i < Grid.length; i++) {
-            for (int j = 0; j < Grid[0].length; j++){
-                System.out.print(Grid[i][j] + " ");
+        for (char[] chars : Grid) {
+            for (int j = 0; j < Grid[0].length; j++) {
+                System.out.print(chars[j] + " ");
             }
             System.out.println();
         }
